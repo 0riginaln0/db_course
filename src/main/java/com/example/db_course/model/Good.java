@@ -1,14 +1,10 @@
 package com.example.db_course.model;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,13 +19,13 @@ public class Good {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "good_id")
-    private Long goodId;
+    private Integer goodId;
 
     @Column(nullable = false)
     private String name;
 
     @Column
-    private double priority;
+    private float priority;
 
     // one to many -> sales, warehouse1, warehouse2
     // @OneToMany(mappedBy = "good", cascade = CascadeType.ALL)
@@ -40,7 +36,7 @@ public class Good {
         this.name = name;
     }
 
-    public Good(String name, double priority) {
+    public Good(String name, float priority) {
         this.name = name;
         this.priority = priority;
     }

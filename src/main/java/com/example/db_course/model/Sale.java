@@ -1,6 +1,6 @@
 package com.example.db_course.model;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -25,20 +25,20 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sale_id")
-    private Long saleId;
+    private Integer saleId;
 
     @Column(name = "good_count")
-    private Long goodCount;
+    private Integer goodCount;
 
     @Column(name = "create_date")
-    private LocalDateTime createDate;
+    private ZonedDateTime createDate;
 
     @ManyToOne
     @JoinColumn(name = "good_id", nullable = false)
     @JsonIgnoreProperties("sales")
     private Good good;
 
-    public Sale(Long goodCount, LocalDateTime createDate, Good good) {
+    public Sale(Integer goodCount, ZonedDateTime createDate, Good good) {
         this.goodCount = goodCount;
         this.createDate = createDate;
         this.good = good;

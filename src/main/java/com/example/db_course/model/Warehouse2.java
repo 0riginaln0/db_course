@@ -23,7 +23,7 @@ public class Warehouse2 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "warehouse2_id")
-    private Long warehouse2Id;
+    private Integer warehouse2Id;
 
     @ManyToOne
     @JoinColumn(name = "good_id", nullable = false)
@@ -31,9 +31,9 @@ public class Warehouse2 {
     private Good good;
 
     @Column(name = "good_count")
-    private Long goodCount;
+    private Integer goodCount;
 
-    public Warehouse2(Good good, Long goodCount) {
+    public Warehouse2(Good good, Integer goodCount) {
         this.good = good;
         this.goodCount = goodCount;
     }
