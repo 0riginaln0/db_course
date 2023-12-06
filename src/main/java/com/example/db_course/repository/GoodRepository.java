@@ -1,6 +1,5 @@
 package com.example.db_course.repository;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -59,4 +58,5 @@ public interface GoodRepository extends CrudRepository<Good, Integer> {
             """, nativeQuery = true)
     List<GetDatesDemandComparisonResponse> getDatesDemandComparison(Integer goodId1, Integer goodId2);
 
+    
 }

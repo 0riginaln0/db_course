@@ -7,7 +7,6 @@ import com.example.db_course.custom_responses.GetDatesDemandComparisonResponse;
 import com.example.db_course.custom_responses.GetGoodsForShippingResponse;
 import com.example.db_course.model.Good;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -48,5 +47,5 @@ public class GoodService {
         Integer goodId2) {
         return goodRepository.getDatesDemandComparison(goodId1, goodId2);
     }
-    
+
 }
