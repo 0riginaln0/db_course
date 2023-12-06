@@ -1,5 +1,6 @@
 package com.example.db_course.model;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
