@@ -1,5 +1,6 @@
 package com.example.db_course.repository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -27,11 +28,26 @@ public interface GoodRepository extends CrudRepository<Good, Integer> {
             """, nativeQuery = true)
     List<GetGoodsForShippingResponse> getGoodsForShipping(Integer maxCount);
 
-    // @Query(value = """
-    // SELECT
-    // *
-    // FROM good_id_minimum_sales_number_between(?1, ?2)
-    // """, nativeQuery = true)
-    // List<Integer> getMostUnsellableGoodIdForTimePeriod(String tBegin, String
-    // tEnd);
+    @Query(value = """
+            SELECT
+            *
+            FROM good_id_minimum_sales_number_between(?1, ?2)
+            """, nativeQuery = true)
+    List<Integer> getMostUnsellableGoodIdForTimePeriod(ZonedDateTime tBegin, ZonedDateTime tEnd);
+
+    @Query(value = """
+            SELECT
+            *
+            FROM forecast_demand(?1, ?2, ?3)
+            """, nativeQuery = true)
+    List<Integer> getDemandForecastForTimePeriod(ZonedDateTime tBegin, ZonedDateTime tEnd,
+            Integer goodId);
+
+    @Query(value = """
+            SELECT
+            *
+            FROM demand_increase_analysis(?1, ?2)
+            """, nativeQuery = true)
+    List<Integer> getMostDemandedGoodIdForTimePeriod(ZonedDateTime tBegin, ZonedDateTime tEnd);
+
 }

@@ -41,15 +41,36 @@ public class GoodController {
         return new ResponseEntity<>(goodService.getGoodsForShipping(maxCount), HttpStatus.OK);
     }
 
-    // @GetMapping("/most-unsellable/{tBegin}/{tEnd}")
-    // public ResponseEntity<List<Integer>> getMostUnsellableGoodIdForTimePeriod(
-    // @PathVariable String tBegin, @PathVariable String tEnd) {
-    // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd
-    // HH:mm:ss");
-    // LocalDateTime tBeginParam = LocalDateTime.parse(tBegin, formatter);
-    // LocalDateTime tEndParam = LocalDateTime.parse(tEnd, formatter);
-    // return new ResponseEntity<>(goodService.getMostUnsellableGoodIdForTimePeriod(
-    // tBeginParam, tEndParam), HttpStatus.OK);
-    // }
+    @GetMapping("/most-unsellable/{tBegin}/{tEnd}")
+    public ResponseEntity<List<Integer>> getMostUnsellableGoodIdForTimePeriod(
+            @PathVariable String tBegin, @PathVariable String tEnd) {
 
+        ZonedDateTime zonedDateTimeBegin = ZonedDateTime.parse(tBegin);
+        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.parse(tEnd);
+
+        return new ResponseEntity<>(goodService.getMostUnsellableGoodIdForTimePeriod(
+                zonedDateTimeBegin, zonedDateTimeEnd), HttpStatus.OK);
+    }
+
+    @GetMapping("/demand-forecast/{tBegin}/{tEnd}/{goodId}")
+    public ResponseEntity<List<Integer>> getDemandForecastForTimePeriod(
+            @PathVariable String tBegin, @PathVariable String tEnd, @PathVariable Integer goodId) {
+        System.out.println(goodId);
+        ZonedDateTime zonedDateTimeBegin = ZonedDateTime.parse(tBegin);
+        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.parse(tEnd);
+
+        return new ResponseEntity<>(goodService.getDemandForecastForTimePeriod(
+                zonedDateTimeBegin, zonedDateTimeEnd, goodId), HttpStatus.OK);
+    }
+
+    @GetMapping("/demand-increase/{tBegin}/{tEnd}")
+    public ResponseEntity<List<Integer>> getMostDemandedGoodIdForTimePeriod(
+            @PathVariable String tBegin, @PathVariable String tEnd) {
+
+        ZonedDateTime zonedDateTimeBegin = ZonedDateTime.parse(tBegin);
+        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.parse(tEnd);
+
+        return new ResponseEntity<>(goodService.getMostDemandedGoodIdForTimePeriod(
+                zonedDateTimeBegin, zonedDateTimeEnd), HttpStatus.OK);
+    }
 }
