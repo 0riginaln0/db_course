@@ -1,5 +1,6 @@
 package com.example.db_course.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,12 +9,14 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.db_course.custom_responses.GetDatesDemandComparisonResponse;
 import com.example.db_course.custom_responses.GetGoodsForShippingResponse;
 import com.example.db_course.model.Good;
 import com.example.db_course.service.GoodService;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,5 +75,12 @@ public class GoodController {
 
         return new ResponseEntity<>(goodService.getMostDemandedGoodIdForTimePeriod(
                 zonedDateTimeBegin, zonedDateTimeEnd), HttpStatus.OK);
+    }
+
+    @GetMapping("/demand-comparison/{goodId1}/{goodId2}")
+    public ResponseEntity<List<GetDatesDemandComparisonResponse>> getDatesDemandComparison(
+        @PathVariable Integer goodId1, @PathVariable Integer goodId2) {
+        return new ResponseEntity<>(goodService.getDatesDemandComparison(goodId1, goodId2),
+                HttpStatus.OK);
     }
 }

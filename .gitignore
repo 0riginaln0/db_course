@@ -37,3 +37,4 @@ out/
 .vscode/
 
 secrets.properties
+format_style.xml

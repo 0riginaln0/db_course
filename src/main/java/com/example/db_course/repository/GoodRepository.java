@@ -1,11 +1,13 @@
 package com.example.db_course.repository;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.example.db_course.custom_responses.GetDatesDemandComparisonResponse;
 import com.example.db_course.custom_responses.GetGoodsForShippingResponse;
 import com.example.db_course.model.Good;
 
@@ -49,5 +51,12 @@ public interface GoodRepository extends CrudRepository<Good, Integer> {
             FROM demand_increase_analysis(?1, ?2)
             """, nativeQuery = true)
     List<Integer> getMostDemandedGoodIdForTimePeriod(ZonedDateTime tBegin, ZonedDateTime tEnd);
+
+    @Query(value = """
+            SELECT
+            r.sale_date AS saleDate
+            FROM demand_comparison(?1, ?2) AS r
+            """, nativeQuery = true)
+    List<GetDatesDemandComparisonResponse> getDatesDemandComparison(Integer goodId1, Integer goodId2);
 
 }
