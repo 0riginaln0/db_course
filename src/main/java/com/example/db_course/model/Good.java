@@ -24,8 +24,8 @@ public class Good {
     @Column(nullable = false)
     private String name;
 
-    @Column
-    private float priority;
+    @Column(nullable = false)
+    private Float priority;
 
     // one to many -> sales, warehouse1, warehouse2
     // @OneToMany(mappedBy = "good", cascade = CascadeType.ALL)
@@ -34,9 +34,10 @@ public class Good {
 
     public Good(String name) {
         this.name = name;
+        this.priority = (float) 0.0;
     }
 
-    public Good(String name, float priority) {
+    public Good(String name, Float priority) {
         this.name = name;
         this.priority = priority;
     }

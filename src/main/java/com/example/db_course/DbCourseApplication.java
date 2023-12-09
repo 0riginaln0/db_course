@@ -18,6 +18,7 @@ public class DbCourseApplication {
 
 	@GetMapping
 	public String hello() {
-		return "Hello World!";
+		// return "[{\"text\": \"Hello World!\"}]";
+		return "Hello world!";
 	}
 }

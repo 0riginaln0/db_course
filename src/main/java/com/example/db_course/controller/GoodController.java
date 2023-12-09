@@ -15,8 +15,14 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
 
 @RestController
 @RequestMapping("good")
@@ -27,6 +33,18 @@ public class GoodController {
     @GetMapping("/all")
     public ResponseEntity<List<Good>> getAllGoods() {
         return new ResponseEntity<>(goodService.getAllGoods(), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/post", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Good>> addNewGood(@RequestBody Good newGood) {
+        var good = goodService.addNewGood(newGood);
+        return new ResponseEntity<>(good, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/put")
+    public ResponseEntity<List<Good>> updateGood(@RequestBody Good updatedGood) {
+        var good = goodService.updateGood(updatedGood);
+        return new ResponseEntity<>(good, HttpStatus.CREATED);
     }
 
     @GetMapping("/for-shipping")
