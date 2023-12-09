@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +46,12 @@ public class GoodController {
     public ResponseEntity<List<Good>> updateGood(@RequestBody Good updatedGood) {
         var good = goodService.updateGood(updatedGood);
         return new ResponseEntity<>(good, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<List<Good>> deleteGood(@RequestBody Good deletedGood) {
+        var good = goodService.deleteGood(deletedGood);
+        return new ResponseEntity<>(good, HttpStatus.OK);
     }
 
     @GetMapping("/for-shipping")

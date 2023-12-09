@@ -62,7 +62,7 @@ public class GoodService {
     public List<Good> updateGood(Good updatedGood) {
         Good oldGood = goodRepository.findById(updatedGood.getGoodId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                    "Good with id " + updatedGood.getGoodId() + "is not found"
+                    "Good with id " + updatedGood.getGoodId() + " is not found"
                     ));
         if (updatedGood.getName() == null) {
             updatedGood.setName(oldGood.getName());
@@ -71,6 +71,17 @@ public class GoodService {
             updatedGood.setPriority(oldGood.getPriority());
         }
         Good returnGood = goodRepository.save(updatedGood);
+        List<Good> returnValue = new ArrayList<>();
+        returnValue.add(returnGood);
+        return returnValue;
+    }
+
+    public List<Good> deleteGood(Good toDeleteGood) {
+        Good returnGood = goodRepository.findById(toDeleteGood.getGoodId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Good with id " + toDeleteGood.getGoodId() + " is not found"
+                    ));
+        goodRepository.deleteById(toDeleteGood.getGoodId());
         List<Good> returnValue = new ArrayList<>();
         returnValue.add(returnGood);
         return returnValue;
