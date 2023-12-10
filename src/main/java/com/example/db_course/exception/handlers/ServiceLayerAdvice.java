@@ -36,4 +36,16 @@ public class ServiceLayerAdvice {
                 + "\n  line number: " + ex.getStackTrace()[0].getLineNumber());
         return ex.getMessage();
     }
+    
+    @ResponseBody
+    @ExceptionHandler(ForbiddenRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String forbiddenRequestHandler(ForbiddenRequestException ex) {
+        log.error("\n" + ex.getMessage()
+                + "\n    file name: " + ex.getStackTrace()[0].getFileName()
+                + "\n   class name: " + ex.getStackTrace()[0].getClassName()
+                + "\n  method name: " + ex.getStackTrace()[0].getMethodName()
+                + "\n  line number: " + ex.getStackTrace()[0].getLineNumber());
+        return ex.getMessage();
+    }
 }

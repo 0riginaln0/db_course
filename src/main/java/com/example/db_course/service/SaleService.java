@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
+import com.example.db_course.exception.handlers.ForbiddenRequestException;
 import com.example.db_course.model.Good;
 import com.example.db_course.model.Sale;
 import com.example.db_course.model.Warehouse1;
@@ -83,30 +84,45 @@ public class SaleService {
                     "Sale with id " + toUpdateSale.getSaleId() + " is not found"
                     ));
         
-        var oldGood = oldSale.getGood();
-        var oldGoodCount = oldSale.getGoodCount();
-        Warehouse2 wh2 = warehouse2Repository.getWarehouse2ByGood(oldGood);
-        Integer wh2Count = wh2.getGoodCount();
-        wh2.setGoodCount(wh2Count + oldGoodCount);
-        
         if (toUpdateSale.getCreateDate() == null) {
             toUpdateSale.setCreateDate(oldSale.getCreateDate());
         }
-        if (toUpdateSale.getGoodCount() == null) {
-            toUpdateSale.setGoodCount(oldSale.getGoodCount());
+        if (toUpdateSale.getGood() == null || 
+            toUpdateSale.getGood().getGoodId().equals(oldSale.getGood().getGoodId())) {
+            
+            if (toUpdateSale.getGoodCount() == null ||
+                toUpdateSale.getGoodCount().equals(oldSale.getGoodCount())) {
+                toUpdateSale.setGoodCount(oldSale.getGoodCount());
+                saleRepository.save(toUpdateSale);
+            } else {
+                if (toUpdateSale.getGoodCount() < 1) {
+                    throw new ForbiddenRequestException("Count can't be less than one");
+                }
+                Integer difference = toUpdateSale.getGoodCount() - oldSale.getGoodCount();
+                Warehouse2 updatedWarehouse = warehouse2Repository.getWarehouse2ByGood(oldSale.getGood());
+                
+                if (difference < 0) {
+                    updatedWarehouse.setGoodCount(updatedWarehouse.getGoodCount() - difference);
+                    warehouse2Repository.save(updatedWarehouse);
+                } else if (difference <= updatedWarehouse.getGoodCount()) {
+                    updatedWarehouse.setGoodCount(updatedWarehouse.getGoodCount() - difference);
+                    warehouse2Repository.save(updatedWarehouse);
+                } else {
+                    throw new ForbiddenRequestException("Not enough goods in warehouse");
+                }
+                saleRepository.save(toUpdateSale);
+            }
+        } else if (!toUpdateSale.getGood().getGoodId().equals(oldSale.getGood().getGoodId())) {
+            Warehouse2 oldWh2 = warehouse2Repository.getWarehouse2ByGood(oldSale.getGood());
+            Integer quantityToAdd = oldSale.getGoodCount();
+            oldWh2.setGoodCount(oldWh2.getGoodCount() + quantityToAdd);
+
+
+            addNewSale(toUpdateSale);
+            warehouse2Repository.save(oldWh2);
         }
-        if (toUpdateSale.getGood() == null) {
-            toUpdateSale.setGood(oldSale.getGood());
-        } else {
-            Good good = goodRepository.findById(toUpdateSale.getGood().getGoodId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                    "Good with id " + toUpdateSale.getGood().getGoodId() + " is not found"
-                    ));
-            toUpdateSale.setGood(good);
-        }
-        List<Sale> returnValue = addNewSale(toUpdateSale);
-        
-        warehouse2Repository.save(wh2);
+        List<Sale> returnValue = new ArrayList<>();
+        returnValue.add(toUpdateSale);
         return returnValue;
     }
 }
