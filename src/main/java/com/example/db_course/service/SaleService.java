@@ -49,8 +49,6 @@ public class SaleService {
         newSale.setGood(good);
         System.out.println(newSale.getCreateDate());
         System.out.println("Preparing adding new sale");
-        Sale addedSale = saleRepository.save(newSale);
-        System.out.println("Added new sale");
         // Со склада удаляем то что надо
         Warehouse1 wh1 = warehouse1Repository.getWarehouse1ByGood(good);
         Integer count = newSale.getGoodCount();
@@ -69,10 +67,17 @@ public class SaleService {
             }
         } else {
             Warehouse2 wh2 = warehouse2Repository.getWarehouse2ByGood(good);
+            if (wh2 == null) {
+                throw new EntityNotFoundException(
+                    "Good with id " + newSale.getGood().getGoodId() + " is not in stock");
+            }
             Integer wh2Count = wh2.getGoodCount();
             wh2.setGoodCount(wh2Count - count);
             warehouse2Repository.save(wh2);
         }
+        
+        Sale addedSale = saleRepository.save(newSale);
+        System.out.println("Added new sale");
         List<Sale> returnValue = new ArrayList<>();
         returnValue.add(addedSale);
         return returnValue;

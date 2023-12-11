@@ -7,7 +7,9 @@ import com.example.db_course.repository.GoodRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 import com.example.db_course.custom_responses.GetDatesDemandComparisonResponse;
+import com.example.db_course.custom_responses.GetDemandChangeResponse;
 import com.example.db_course.custom_responses.GetGoodsForShippingResponse;
+import com.example.db_course.custom_responses.GetTop5PopularGoodsResponse;
 import com.example.db_course.model.Good;
 
 import java.time.ZonedDateTime;
@@ -42,6 +44,11 @@ public class GoodService {
         return (List<Integer>) goodRepository.getDemandForecastForTimePeriod(tBegin, tEnd, goodId);
     }
 
+    public List<GetDemandChangeResponse> getDemandChange(ZonedDateTime tBegin, ZonedDateTime tEnd,
+            Integer goodId) {
+        return (List<GetDemandChangeResponse>) goodRepository.getDemandChange(tBegin, tEnd, goodId);
+    }
+
     public List<Integer> getMostDemandedGoodIdForTimePeriod(ZonedDateTime tBegin,
             ZonedDateTime tEnd) {
         return (List<Integer>) goodRepository.getMostDemandedGoodIdForTimePeriod(tBegin, tEnd);
@@ -50,6 +57,10 @@ public class GoodService {
     public List<GetDatesDemandComparisonResponse> getDatesDemandComparison(Integer goodId1, 
         Integer goodId2) {
         return goodRepository.getDatesDemandComparison(goodId1, goodId2);
+    }
+
+    public List<GetTop5PopularGoodsResponse> getTop5PopularGoods(ZonedDateTime tBegin, ZonedDateTime tEnd) {
+        return goodRepository.getTop5PopularGoods(tBegin, tEnd);
     }
 
     public List<Good> addNewGood(Good newGood) {

@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.db_course.custom_responses.GetDatesDemandComparisonResponse;
+import com.example.db_course.custom_responses.GetDemandChangeResponse;
 import com.example.db_course.custom_responses.GetGoodsForShippingResponse;
+import com.example.db_course.custom_responses.GetTop5PopularGoodsResponse;
 import com.example.db_course.model.Good;
 import com.example.db_course.service.GoodService;
 
@@ -87,6 +89,17 @@ public class GoodController {
                 zonedDateTimeBegin, zonedDateTimeEnd, goodId), HttpStatus.OK);
     }
 
+    @GetMapping("/demand-change/{tBegin}/{tEnd}/{goodId}")
+    public ResponseEntity<List<GetDemandChangeResponse>> getDemandChange(
+            @PathVariable String tBegin, @PathVariable String tEnd, @PathVariable Integer goodId) {
+        System.out.println(goodId);
+        ZonedDateTime zonedDateTimeBegin = ZonedDateTime.parse(tBegin);
+        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.parse(tEnd);
+
+        return new ResponseEntity<>(goodService.getDemandChange(
+                zonedDateTimeBegin, zonedDateTimeEnd, goodId), HttpStatus.OK);
+    }
+
     @GetMapping("/demand-increase/{tBegin}/{tEnd}")
     public ResponseEntity<List<Integer>> getMostDemandedGoodIdForTimePeriod(
             @PathVariable String tBegin, @PathVariable String tEnd) {
@@ -95,6 +108,17 @@ public class GoodController {
         ZonedDateTime zonedDateTimeEnd = ZonedDateTime.parse(tEnd);
 
         return new ResponseEntity<>(goodService.getMostDemandedGoodIdForTimePeriod(
+                zonedDateTimeBegin, zonedDateTimeEnd), HttpStatus.OK);
+    }
+
+    @GetMapping("/top-5/{tBegin}/{tEnd}")
+    public ResponseEntity<List<GetTop5PopularGoodsResponse>> getTop5PopularGoods(
+            @PathVariable String tBegin, @PathVariable String tEnd) {
+
+        ZonedDateTime zonedDateTimeBegin = ZonedDateTime.parse(tBegin);
+        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.parse(tEnd);
+
+        return new ResponseEntity<>(goodService.getTop5PopularGoods(
                 zonedDateTimeBegin, zonedDateTimeEnd), HttpStatus.OK);
     }
 

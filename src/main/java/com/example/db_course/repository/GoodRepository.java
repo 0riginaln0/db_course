@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.example.db_course.custom_responses.GetDatesDemandComparisonResponse;
+import com.example.db_course.custom_responses.GetDemandChangeResponse;
 import com.example.db_course.custom_responses.GetGoodsForShippingResponse;
+import com.example.db_course.custom_responses.GetTop5PopularGoodsResponse;
 import com.example.db_course.model.Good;
 
 public interface GoodRepository extends CrudRepository<Good, Integer> {
@@ -58,5 +60,27 @@ public interface GoodRepository extends CrudRepository<Good, Integer> {
             """, nativeQuery = true)
     List<GetDatesDemandComparisonResponse> getDatesDemandComparison(Integer goodId1, Integer goodId2);
 
+
+    @Query(value = """
+        SELECT goods.name, sum(sales.good_count) AS popularity, goods.priority
+        FROM goods
+        JOIN sales ON sales.good_id = goods.good_id
+        WHERE sales.create_date >= ?1 AND sales.create_date <= ?2
+            GROUP BY goods.good_id
+            ORDER BY (sum(sales.good_count)) DESC, goods.priority DESC
+            LIMIT 5;
+        """, nativeQuery = true)
+    List<GetTop5PopularGoodsResponse> getTop5PopularGoods(ZonedDateTime tBegin, ZonedDateTime tEnd);
+
+    @Query(value = """
+        SELECT SUM(sales.good_count) as demand, DATE(sales.create_date), goods."name"
+        FROM sales
+        JOIN goods on sales.good_id = goods.good_id
+        WHERE (sales.good_id = ?3) and sales.create_date BETWEEN ?1 AND ?2
+            GROUP BY DATE(sales.create_date), goods."name"
+            ORDER BY DATE(sales.create_date);
+            """, nativeQuery = true)
+    List<GetDemandChangeResponse> getDemandChange(ZonedDateTime tBegin, ZonedDateTime tEnd,
+            Integer goodId);
     
 }
