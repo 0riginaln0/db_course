@@ -89,6 +89,7 @@ public class GoodController {
                 zonedDateTimeBegin, zonedDateTimeEnd, goodId), HttpStatus.OK);
     }
 
+    // подпись, несколько потоков по умолчанию. добавить 2 пользователей
     @GetMapping("/demand-change/{tBegin}/{tEnd}/{goodId}")
     public ResponseEntity<List<GetDemandChangeResponse>> getDemandChange(
             @PathVariable String tBegin, @PathVariable String tEnd, @PathVariable Integer goodId) {

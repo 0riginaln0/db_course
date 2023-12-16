@@ -6,8 +6,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.db_course.config.JwtConfigProperties;
+
 @SpringBootApplication
-@EnableConfigurationProperties
+@EnableConfigurationProperties(JwtConfigProperties.class)
 @RestController
 public class DbCourseApplication {
 
